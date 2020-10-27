@@ -1,26 +1,34 @@
 @startuml
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
-
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-Object[] elementData
-size()
+entity Worker {
+    id
+    --
+    * name
+    profile_id
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+entity WorkerProfiles {
+    id
+    --
+    name
 }
 
+entity Tasks {
+    id
+    --
+    task_name
+    task_description
+    deadline_date
+}
+
+entity TaskOwner {
+    worker_id
+    tasks_id
+    --
+    quantity
+}
+
+WorkerProfiles ||--o{ Worker
+Worker ||-o{ TaskOwner
+TaskLines }o-|| Tasks
 @enduml
