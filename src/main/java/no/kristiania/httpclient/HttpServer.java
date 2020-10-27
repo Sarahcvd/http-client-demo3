@@ -181,7 +181,7 @@ public class HttpServer {
     }
 
 
-    public List<Worker> getWorkerNames() throws SQLException {
+    public List<Worker> getWorkers() throws SQLException {
         return workerDao.list();
     }
 }
