@@ -18,6 +18,7 @@ public class WorkerDao {
             try (PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO worker (first_name, last_name, email_address) VALUES (?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS
+
             )) {
                 statement.setString(1, worker.getFirstName());
                 statement.setString(2, worker.getLastName());
