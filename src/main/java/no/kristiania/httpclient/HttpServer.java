@@ -37,6 +37,7 @@ public class HttpServer {
         );
         // Open an entry point to our program for network clients
         serverSocket = new ServerSocket(port);
+        logger.warn("Server started on port {}", serverSocket.getLocalPort());
 
         // New threads executes the code in a separate "thread", that is: In parallel
         new Thread(() -> {  // Anonymous function with code that will be executed in parallel (INFINITE LOOP!!)
