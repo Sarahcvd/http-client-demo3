@@ -25,11 +25,10 @@ public class HttpServer {
 
     private Map<String, HttpController> controllers;
 
-    private int port;
     private WorkerDao workerDao;
+    private ServerSocket serverSocket;
 
     public HttpServer(int port, DataSource dataSource) throws IOException {
-        this.port = port;
         workerDao = new WorkerDao(dataSource);
         WorkerTaskDao workerTaskDao = new WorkerTaskDao(dataSource);
         controllers = Map.of(
@@ -37,7 +36,7 @@ public class HttpServer {
                 "/api/tasks", new WorkerTaskGetController(workerTaskDao)
         );
         // Open an entry point to our program for network clients
-        ServerSocket serverSocket = new ServerSocket(port);
+        serverSocket = new ServerSocket(port);
 
         // New threads executes the code in a separate "thread", that is: In parallel
         new Thread(() -> {  // Anonymous function with code that will be executed in parallel (INFINITE LOOP!!)
@@ -55,7 +54,7 @@ public class HttpServer {
     }
 
     public int getPort() {
-        return port;
+        return serverSocket.getLocalPort();
     }
 
     // This code will be executed for each client (connection)
