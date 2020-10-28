@@ -1,14 +1,26 @@
 package no.kristiania.httpclient;
 
 import no.kristiania.database.Worker;
+import no.kristiania.database.WorkerTask;
+import no.kristiania.database.WorkerTaskDao;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class WorkerTaskGetController implements HttpController {
+    private WorkerTaskDao workerTaskDao;
+
+    public WorkerTaskGetController(WorkerTaskDao workerTaskDao) {
+        this.workerTaskDao = workerTaskDao;
+    }
+
     @Override
-    public void handle(HttpMessage request, Socket clientSocket) throws IOException {
+    public void handle(HttpMessage request, Socket clientSocket) throws IOException, SQLException {
         String body = "<ul>";
+        for(WorkerTask task : workerTaskDao.list()) {
+            body += "<li>" + task.getName() + "</li>";
+        }
 
         /*  Han sletter dette, men det skal sikkert med senere
         for (Worker worker : workerDao.list()) {

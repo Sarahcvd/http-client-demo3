@@ -122,7 +122,7 @@ class HttpServerTest {
         HttpClient postClient = new HttpClient("localhost", 10010, "/api/newTask", "POST", requestBody);
         assertEquals(200, postClient.getStatusCode());
 
-        HttpClient getClient = new HttpClient("localhost", 10009, "/api/tasks");
+        HttpClient getClient = new HttpClient("localhost", 10010, "/api/tasks");
         assertThat(getClient.getResponseBody()).contains("<li>Desk cleaning</li>");
     }
 }
