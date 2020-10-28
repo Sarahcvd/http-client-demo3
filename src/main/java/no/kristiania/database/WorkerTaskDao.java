@@ -33,6 +33,7 @@ public class WorkerTaskDao {
 
     private WorkerTask mapRowToTask(ResultSet rs) throws SQLException {
         WorkerTask task = new WorkerTask();
+        task.setId(rs.getLong("id"));
         task.setName(rs.getString("name"));
         return task;
     }
@@ -54,7 +55,18 @@ public class WorkerTaskDao {
         }
     }
 
-    public WorkerTask retrieve(Long id) {
-        return null;
+    public WorkerTask retrieve(Long id) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("select * from worker_tasks WHERE id = ?")) {
+                statement.setLong(1, id);
+                try (ResultSet rs = statement.executeQuery()) {
+                    if (rs.next()) {
+                        return mapRowToTask(rs);
+                    } else {
+                        return null;
+                    }
+                }
+            }
+        }
     }
 }
