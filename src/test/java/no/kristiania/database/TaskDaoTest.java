@@ -5,6 +5,8 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TaskDaoTest {
@@ -21,9 +23,11 @@ public class TaskDaoTest {
     }
 
     @Test
-    void shouldListAllTasks(){
+    void shouldListAllTasks() throws SQLException {
         WorkerTask task1 = exampleTask();
         WorkerTask task2 = exampleTask();
+        taskDao.insert(task1);
+        taskDao.insert(task2);
         assertThat(taskDao.list())
                 .extracting(WorkerTask::getName)
                 .contains(task1.getName(), task2.getName());
