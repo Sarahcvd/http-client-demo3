@@ -53,4 +53,8 @@ public class WorkerTaskDao {
             }
         }
     }
+
+    public WorkerTask retrieve(Long id) {
+        return null;
+    }
 }

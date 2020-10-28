@@ -35,8 +35,15 @@ public class TaskDaoTest {
 
 
     @Test
-    void shouldRetrieveAllTaskProperties() {
+    void shouldRetrieveAllTaskProperties() throws SQLException {
+        taskDao.insert(exampleTask());
+        taskDao.insert(exampleTask());
+        WorkerTask task = exampleTask();
+        taskDao.insert(task);
 
+        assertThat(taskDao.retrieve(task.getId()))
+                .usingRecursiveComparison()
+                .isEqualTo(task);
     }
 
     private WorkerTask exampleTask() {
