@@ -14,16 +14,16 @@ public class WorkerTaskDao {
 
     public List<WorkerTask> list() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("select * from worker")) {
+            try (PreparedStatement statement = connection.prepareStatement("select * from worker_tasks")) {
                 try (ResultSet rs = statement.executeQuery()) {
                     List<WorkerTask> workers = new ArrayList<>();
                     while (rs.next()) {
-                        Worker worker = new Worker();
+                        //Worker worker = new Worker();
                         workers.add(mapRowToTask(rs));
-                        rs.getString("first_name");
+                        /*rs.getString("first_name");
                         rs.getString("last_name");
                         rs.getString("email_address");
-                        worker.setId(rs.getLong("id"));
+                        worker.setId(rs.getLong("id"));*/
                     }
                     return workers;
                 }
@@ -31,14 +31,16 @@ public class WorkerTaskDao {
         }
     }
 
-    private WorkerTask mapRowToTask(ResultSet rs) {
-        return new WorkerTask();
+    private WorkerTask mapRowToTask(ResultSet rs) throws SQLException {
+        WorkerTask task = new WorkerTask();
+        task.setName(rs.getString("name"));
+        return task;
     }
 
     public void insert(WorkerTask task) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO worker (first_name, last_name, email_address) VALUES (?, ?, ?)",
+                    "INSERT INTO worker_tasks (name) VALUES (?)",
                     Statement.RETURN_GENERATED_KEYS
             )) {
                 statement.setString(1, task.getName());

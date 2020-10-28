@@ -40,6 +40,6 @@ public class TaskDaoTest {
     }
 
     private WorkerTask exampleTask() {
-        return null;
+        return new WorkerTask();
     }
 }
