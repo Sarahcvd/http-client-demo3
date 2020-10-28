@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WorkerTaskDao {
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public WorkerTaskDao(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -18,7 +18,7 @@ public class WorkerTaskDao {
                 try (ResultSet rs = statement.executeQuery()) {
                     List<WorkerTask> workers = new ArrayList<>();
                     while (rs.next()) {
-                        workers.add(mapRowToTask(rs));
+                        workers.add(mapRow(rs));
                     }
                     return workers;
                 }
@@ -48,7 +48,7 @@ public class WorkerTaskDao {
                 statement.setLong(1, id);
                 try (ResultSet rs = statement.executeQuery()) {
                     if (rs.next()) {
-                        return mapRowToTask(rs);
+                        return mapRow(rs);
                     } else {
                         return null;
                     }
@@ -57,7 +57,7 @@ public class WorkerTaskDao {
         }
     }
 
-    private WorkerTask mapRowToTask(ResultSet rs) throws SQLException {
+    private WorkerTask mapRow(ResultSet rs) throws SQLException {
         WorkerTask task = new WorkerTask();
         task.setId(rs.getLong("id"));
         task.setName(rs.getString("name"));

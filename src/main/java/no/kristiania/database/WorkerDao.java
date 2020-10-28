@@ -5,12 +5,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkerDao {
-
-    private final DataSource dataSource;
+public class WorkerDao extends AbstractDao<Worker> {
 
     public WorkerDao(DataSource dataSource) {
-        this.dataSource = dataSource;
+        super(dataSource);
     }
 
     public List<Worker> list() throws SQLException {
@@ -20,7 +18,7 @@ public class WorkerDao {
                     List<Worker> workers = new ArrayList<>();
                     while (rs.next()) {
                         Worker worker = new Worker();
-                        workers.add(mapRowToWorker(rs));
+                        workers.add(mapRow(rs));
                         rs.getString("first_name");
                         rs.getString("last_name");
                         rs.getString("email_address");
@@ -53,21 +51,11 @@ public class WorkerDao {
     }
 
     public Worker retrieve(Long id) throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("select * from worker WHERE id = ?")) {
-                statement.setLong(1, id);
-                try (ResultSet rs = statement.executeQuery()) {
-                    if (rs.next()) {
-                        return mapRowToWorker(rs);
-                    } else {
-                        return null;
-                    }
-                }
-            }
-        }
+        return retrieve(id, "SELECT * FROM worker WHERE id = ?");
     }
 
-    private Worker mapRowToWorker(ResultSet rs) throws SQLException {
+    @Override
+    protected Worker mapRow(ResultSet rs) throws SQLException {
         Worker worker = new Worker();
         worker.setId(rs.getLong("id"));
         worker.setFirstName(rs.getString("first_name"));
