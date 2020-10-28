@@ -1,6 +1,5 @@
 package no.kristiania.httpclient;
 
-import no.kristiania.database.Worker;
 import no.kristiania.database.WorkerTask;
 import no.kristiania.database.WorkerTaskDao;
 
@@ -21,11 +20,6 @@ public class WorkerTaskGetController implements HttpController {
         for(WorkerTask task : workerTaskDao.list()) {
             body += "<li>" + task.getName() + "</li>";
         }
-
-        /*  Han sletter dette, men det skal sikkert med senere
-        for (Worker worker : workerDao.list()) {
-            body += "<li>" + worker.getFirstName() + " " + worker.getLastName() + " " + worker.getEmailAddress() + "</li>";
-        }*/
 
         body += "</ul>";
         String response = "HTTP/1.1 200 OK\r\n" +
