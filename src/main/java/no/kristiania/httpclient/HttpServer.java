@@ -16,11 +16,17 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class HttpServer {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpServer.class);
+
+    private Map<String, HttpController> controllers = Map.of(
+            "/api/newTask", new WorkerTaskPostController(),
+            "/api/tasks", new WorkerTaskGetController()
+    );
 
     private WorkerDao workerDao;
 
@@ -58,32 +64,49 @@ public class HttpServer {
         String requestPath = questionPos != -1 ? requestTarget.substring(0, questionPos) : requestTarget;
 
         if(requestMethod.equals("POST")){
-            QueryString requestedParameter = new QueryString(request.getBody());
-            String decodedOutput = URLDecoder.decode(requestedParameter.getParameter("email_address"), StandardCharsets.UTF_8);
-
-            Worker worker = new Worker();
-            worker.setFirstName(requestedParameter.getParameter("first_name"));
-            worker.setLastName(requestedParameter.getParameter("last_name"));
-            worker.setEmailAddress(decodedOutput);
-
-            workerDao.insert(worker);
-            String body = "Okay";
-            String response = "HTTP/1.1 200 OK\r\n" +
-                    "Content-Length: " + body.length() + "\r\n" +
-                    "Connection: close\r\n" +
-                    "\r\n" +
-                    body;
-            // Write the response back to the client
-            clientSocket.getOutputStream().write(response.getBytes());
+            if(requestPath.equals("/api/newWorker")){
+                handlePostWorker(clientSocket, request);
+            }else {
+                getController(requestPath).handle(request, clientSocket);
+            }
         } else {
             if (requestPath.equals("/echo")) {
                 handleEchoRequest(clientSocket, requestTarget, questionPos);
             } else if (requestPath.equals("/api/worker")){
                 handleGetWorkers(clientSocket);
             } else {
-                handleFileRequest(clientSocket, requestPath);
+                HttpController controller = controllers.get(requestPath);
+                if(controller != null){
+                    controller.handle(request, clientSocket);
+                }else{
+                    handleFileRequest(clientSocket, requestPath);
+                }
             }
         }
+    }
+
+    private HttpController getController(String requestPath) {
+        return controllers.get(requestPath);
+    }
+
+    private void handlePostWorker(Socket clientSocket, HttpMessage request) throws SQLException, IOException {
+        QueryString requestedParameter = new QueryString(request.getBody());
+        String decodedOutput = URLDecoder.decode(requestedParameter.getParameter("email_address"), StandardCharsets.UTF_8);
+
+        Worker worker = new Worker();
+        worker.setFirstName(requestedParameter.getParameter("first_name"));
+        worker.setLastName(requestedParameter.getParameter("last_name"));
+        worker.setEmailAddress(decodedOutput);
+
+        workerDao.insert(worker);
+        String body = "Okay";
+        String response = "HTTP/1.1 200 OK\r\n" +
+                "Content-Length: " + body.length() + "\r\n" +
+                "Connection: close\r\n" +
+                "\r\n" +
+                body;
+        // Write the response back to the client
+        clientSocket.getOutputStream().write(response.getBytes());
     }
 
     private void handleFileRequest(Socket clientSocket, String requestPath) throws IOException {

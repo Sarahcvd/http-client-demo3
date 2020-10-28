@@ -91,7 +91,7 @@ class HttpServerTest {
     }
 
     @Test
-    void shouldPostNewProduct() throws IOException, SQLException {
+    void shouldPostNewWorker() throws IOException, SQLException {
         HttpServer server = new HttpServer(10008, dataSource);
         String requestBody = "first_name=wali&email_address=wgbjork@gmail.com";
         HttpClient client = new HttpClient("localhost", 10008, "/api/newWorker", "POST", requestBody);
@@ -115,5 +115,14 @@ class HttpServerTest {
         assertThat(client.getResponseBody()).contains("<li>wali gustav wgbjork@gmail.com</li>");
     }
 
+    @Test
+    void shouldPostNewTask() throws IOException, SQLException {
+        HttpServer server = new HttpServer(10010, dataSource);
+        String requestBody = "taskName=Desk cleaning&color=black";
+        HttpClient postClient = new HttpClient("localhost", 10010, "/api/newTask", "POST", requestBody);
+        assertEquals(200, postClient.getStatusCode());
 
+        HttpClient getClient = new HttpClient("localhost", 10009, "/api/tasks");
+        assertThat(getClient.getResponseBody()).contains("<li>Desk cleaning</li>");
+    }
 }
