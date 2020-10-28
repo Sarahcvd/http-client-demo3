@@ -1,6 +1,5 @@
 package no.kristiania.httpclient;
 
-
 import no.kristiania.database.Worker;
 import no.kristiania.database.WorkerDao;
 import no.kristiania.database.WorkerTaskDao;
@@ -26,9 +25,11 @@ public class HttpServer {
 
     private Map<String, HttpController> controllers;
 
+    private int port;
     private WorkerDao workerDao;
 
     public HttpServer(int port, DataSource dataSource) throws IOException {
+        this.port = port;
         workerDao = new WorkerDao(dataSource);
         WorkerTaskDao workerTaskDao = new WorkerTaskDao(dataSource);
         controllers = Map.of(
@@ -52,6 +53,11 @@ public class HttpServer {
         }).start();  // Start the threads, so the code inside executes without blocking the current thread
         // Now the test does NOT have to wait for someone to connect
     }
+
+    public int getPort() {
+        return port;
+    }
+
     // This code will be executed for each client (connection)
     private void handleRequest(Socket clientSocket) throws IOException, SQLException {
         HttpMessage request = new HttpMessage(clientSocket);
