@@ -1,0 +1,34 @@
+@startuml
+
+entity Worker {
+    id
+    --
+    * name
+    profile_id
+}
+
+entity WorkerProfiles {
+    id
+    --
+    name
+}
+
+entity Tasks {
+    id
+    --
+    task_name
+    task_description
+    deadline_date
+}
+
+entity TaskOwner {
+    worker_id
+    tasks_id
+    --
+    quantity
+}
+
+WorkerProfiles ||--o{ Worker
+Worker ||-o{ TaskOwner
+TaskLines }o-|| Tasks
+@enduml

@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add project worker | KristianiaProject</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-<h1>Add project worker</h1>
+    <head>
+        <meta charset="UTF-8">
+        <title>Add project employee | KristianiaProject</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <h1>Add project worker</h1>
 
-<form method="POST" action="/worker">
-    <div><label>First name: <input type="text" name="first_name" /></label></div>
-    <div><label>Last name: <input type="text" name="last_name" /></label></div>
-    <div><label>Email address: <input type="email" name="email_address" /></label></div>
-    <button>Add</button>
-</form>
+        <form method="POST" action="/api/worker">
+            <div><label>First name: <input type="text" name="first_name" /></label></div>
+            <div><label>Last name: <input type="text" name="last_name" /></label></div>
+            <div><label>Email address: <input type="email" name="email_address" /></label></div>
+            <button>Add</button>
+        </form>
 
-<div>
-    <a href=".">Return to front page</a>
-</div>
-</body>
+        <div>
+            <a href="index.html">Return to employee overview</a>
+        </div>
+    </body>
 </html>

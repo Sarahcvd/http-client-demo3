@@ -75,9 +75,9 @@ class HttpServerTest {
         HttpServer server = new HttpServer(10006, dataSource);
         File contentRoot = new File("target/test-classes");
 
-        Files.writeString(new File(contentRoot,"showWorker.html").toPath(), "<h2>Hello World</h2>");
+        Files.writeString(new File(contentRoot, "index.html").toPath(), "<h2>Hello World</h2>");
 
-        HttpClient client = new HttpClient("localhost", 10006, "/showWorker.html");
+        HttpClient client = new HttpClient("localhost", 10006, "/index.html");
         assertEquals("text/html", client.getResponseHeader("Content-Type"));
     }
 
@@ -91,13 +91,15 @@ class HttpServerTest {
     }
 
     @Test
-    void shouldPostNewProduct() throws IOException, SQLException {
+    void shouldPostNewWorker() throws IOException, SQLException {
         HttpServer server = new HttpServer(10008, dataSource);
-        HttpClient client = new HttpClient("localhost", 10008, "/api/newWorker", "POST", "full_name=wali&email_address=wgbjork@gmail.com");
+        String requestBody = "first_name=wali&email_address=wgbjork@gmail.com";
+        HttpClient client = new HttpClient("localhost", 10008, "/api/newWorker", "POST", requestBody);
         assertEquals(200, client.getStatusCode());
-        assertThat(server.getWorkerNames())
-                .extracting(Worker::getFirstName)
-                .contains("wali");
+        assertThat(server.getWorkers())
+                .filteredOn(worker -> worker.getFirstName().equals("wali"))
+                .isNotEmpty()
+                .satisfies(w -> assertThat(w.get(0).getEmailAddress()).isEqualTo("wgbjork@gmail.com"));
     }
 
     @Test
@@ -107,11 +109,20 @@ class HttpServerTest {
         Worker worker = new Worker();
         worker.setFirstName("wali");
         worker.setLastName("gustav");
-        worker.setEmailAddress("lol@england.no");
+        worker.setEmailAddress("wgbjork@gmail.com");
         workerDao.insert(worker);
         HttpClient client = new HttpClient("localhost", 10009, "/api/worker");
-        assertThat(client.getResponseBody()).contains("<li>wali gustav lol@england.no</li>");
+        assertThat(client.getResponseBody()).contains("<li>wali gustav wgbjork@gmail.com</li>");
     }
 
+    @Test
+    void shouldPostNewTask() throws IOException, SQLException {
+        HttpServer server = new HttpServer(10010, dataSource);
+        String requestBody = "taskName=Desk cleaning&color=black";
+        HttpClient postClient = new HttpClient("localhost", 10010, "/api/newTask", "POST", requestBody);
+        assertEquals(200, postClient.getStatusCode());
 
+        HttpClient getClient = new HttpClient("localhost", 10010, "/api/tasks");
+        assertThat(getClient.getResponseBody()).contains("<li>Desk cleaning</li>");
+    }
 }
