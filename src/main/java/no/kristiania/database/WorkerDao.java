@@ -13,6 +13,25 @@ public class WorkerDao {
         this.dataSource = dataSource;
     }
 
+    public List<Worker> list() throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("select * from worker")) {
+                try (ResultSet rs = statement.executeQuery()) {
+                    List<Worker> workers = new ArrayList<>();
+                    while (rs.next()) {
+                        Worker worker = new Worker();
+                        workers.add(mapRowToWorker(rs));
+                        rs.getString("first_name");
+                        rs.getString("last_name");
+                        rs.getString("email_address");
+                        worker.setId(rs.getLong("id"));
+                    }
+                    return workers;
+                }
+            }
+        }
+    }
+
     public void insert(Worker worker) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(
@@ -56,24 +75,4 @@ public class WorkerDao {
         worker.setEmailAddress(rs.getString("email_address"));
         return worker;
     }
-
-    public List<Worker> list() throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("select * from worker")) {
-                try (ResultSet rs = statement.executeQuery()) {
-                    List<Worker> workers = new ArrayList<>();
-                    while (rs.next()) {
-                        Worker worker = new Worker();
-                        workers.add(mapRowToWorker(rs));
-                        rs.getString("first_name");
-                        rs.getString("last_name");
-                        rs.getString("email_address");
-                        worker.setId(rs.getLong("id"));
-                    }
-                    return workers;
-                }
-            }
-        }
-    }
-
 }

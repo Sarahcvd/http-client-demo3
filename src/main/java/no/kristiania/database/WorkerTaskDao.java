@@ -18,26 +18,13 @@ public class WorkerTaskDao {
                 try (ResultSet rs = statement.executeQuery()) {
                     List<WorkerTask> workers = new ArrayList<>();
                     while (rs.next()) {
-                        //Worker worker = new Worker();
                         workers.add(mapRowToTask(rs));
-                        /*rs.getString("first_name");
-                        rs.getString("last_name");
-                        rs.getString("email_address");
-                        worker.setId(rs.getLong("id"));*/
                     }
                     return workers;
                 }
             }
         }
     }
-
-    private WorkerTask mapRowToTask(ResultSet rs) throws SQLException {
-        WorkerTask task = new WorkerTask();
-        task.setId(rs.getLong("id"));
-        task.setName(rs.getString("name"));
-        return task;
-    }
-
     public void insert(WorkerTask task) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(
@@ -69,4 +56,13 @@ public class WorkerTaskDao {
             }
         }
     }
+
+    private WorkerTask mapRowToTask(ResultSet rs) throws SQLException {
+        WorkerTask task = new WorkerTask();
+        task.setId(rs.getLong("id"));
+        task.setName(rs.getString("name"));
+        return task;
+    }
+
+
 }
