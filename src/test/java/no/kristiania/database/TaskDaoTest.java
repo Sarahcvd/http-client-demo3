@@ -6,12 +6,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TaskDaoTest {
 
     private WorkerTaskDao taskDao;
+    private Random random = new Random();
+
 
     @BeforeEach
     void setUp() {
@@ -40,6 +43,7 @@ public class TaskDaoTest {
         taskDao.insert(exampleTask());
         WorkerTask task = exampleTask();
         taskDao.insert(task);
+        assertThat(task).hasNoNullFieldsOrProperties();
 
         assertThat(taskDao.retrieve(task.getId()))
                 .usingRecursiveComparison()
@@ -47,6 +51,13 @@ public class TaskDaoTest {
     }
 
     private WorkerTask exampleTask() {
-        return new WorkerTask();
+        WorkerTask task = new WorkerTask();
+        task.setName(exampleTaskName());
+        return task;
+    }
+
+    private String exampleTaskName() {
+        String[] options = {"Desk cleaning", "Code-review", "Database structure", "Office-backflip", "Wine lottery"};
+        return options[random.nextInt(options.length)];
     }
 }
