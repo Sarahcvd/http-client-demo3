@@ -177,7 +177,7 @@ public class HttpServer {
         Flyway.configure().dataSource(dataSource).load().migrate();
 
         HttpServer server = new HttpServer(8080, dataSource);
-        logger.info("Started on http://localhost:8080/showWorker.html: {}", 8080);
+        logger.info("Started on http://localhost:8080/index.html: {}", 8080);
     }
 
 

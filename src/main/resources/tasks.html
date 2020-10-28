@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<h1>Task overview</h1>
+<div id="tasks"></div>
+
+<div>
+    <a href="index.html">Return to employee overview</a>
+</div>
+
+</body>
+<script>
+    fetch("/api/tasks").then(response => response.text()).then(html => {
+        document.getElementById("tasks").innerHTML = html
+    });
+</script>
+</html>

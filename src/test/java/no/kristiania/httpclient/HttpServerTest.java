@@ -75,9 +75,9 @@ class HttpServerTest {
         HttpServer server = new HttpServer(10006, dataSource);
         File contentRoot = new File("target/test-classes");
 
-        Files.writeString(new File(contentRoot,"showWorker.html").toPath(), "<h2>Hello World</h2>");
+        Files.writeString(new File(contentRoot, "index.html").toPath(), "<h2>Hello World</h2>");
 
-        HttpClient client = new HttpClient("localhost", 10006, "/showWorker.html");
+        HttpClient client = new HttpClient("localhost", 10006, "/index.html");
         assertEquals("text/html", client.getResponseHeader("Content-Type"));
     }
 
