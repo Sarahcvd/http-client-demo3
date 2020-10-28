@@ -2,6 +2,7 @@ package no.kristiania.database;
 
 public class WorkerTask {
     private String name;
+    private Long id;
 
     public String getName() {
         return name;
