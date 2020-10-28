@@ -5,26 +5,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkerTaskDao {
-    private final DataSource dataSource;
+public class WorkerTaskDao extends AbstractDao<WorkerTask>{
 
     public WorkerTaskDao(DataSource dataSource) {
-        this.dataSource = dataSource;
+        super(dataSource);
     }
 
-    public List<WorkerTask> list() throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("select * from worker_tasks")) {
-                try (ResultSet rs = statement.executeQuery()) {
-                    List<WorkerTask> workers = new ArrayList<>();
-                    while (rs.next()) {
-                        workers.add(mapRow(rs));
-                    }
-                    return workers;
-                }
-            }
-        }
-    }
     public void insert(WorkerTask task) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(
@@ -43,21 +29,25 @@ public class WorkerTaskDao {
     }
 
     public WorkerTask retrieve(Long id) throws SQLException {
+        return retrieve(id, "select * from worker_tasks WHERE id = ?");
+    }
+
+    public List<WorkerTask> list() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("select * from worker_tasks WHERE id = ?")) {
-                statement.setLong(1, id);
+            try (PreparedStatement statement = connection.prepareStatement("select * from worker_tasks")) {
                 try (ResultSet rs = statement.executeQuery()) {
-                    if (rs.next()) {
-                        return mapRow(rs);
-                    } else {
-                        return null;
+                    List<WorkerTask> workers = new ArrayList<>();
+                    while (rs.next()) {
+                        workers.add(mapRow(rs));
                     }
+                    return workers;
                 }
             }
         }
     }
 
-    private WorkerTask mapRow(ResultSet rs) throws SQLException {
+    @Override
+    protected WorkerTask mapRow(ResultSet rs) throws SQLException {
         WorkerTask task = new WorkerTask();
         task.setId(rs.getLong("id"));
         task.setName(rs.getString("name"));
