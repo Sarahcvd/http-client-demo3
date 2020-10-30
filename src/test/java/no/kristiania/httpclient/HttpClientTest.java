@@ -10,23 +10,30 @@ class HttpClientTest {
 
     @Test
     void shouldReadSuccessStatusCode() throws IOException {
-        HttpClient httpClient = makeEchoRequest("/echo?status=200");
+        HttpClient httpClient = createEchoRequest("/echo");
         assertEquals(200, httpClient.getStatusCode());
-    }
-
-    private HttpClient makeEchoRequest(String requestTarget) throws IOException {
-        return new HttpClient("urlecho.appspot.com", 80, requestTarget);
     }
 
     @Test
     void shouldReadFailureStatusCode() throws IOException {
-        HttpClient httpClient = makeEchoRequest("/echo?status=401");
-        assertEquals(401, httpClient.getStatusCode());
+        HttpClient httpClient = createEchoRequest("/echo?status=404");
+        assertEquals(404, httpClient.getStatusCode());
     }
 
     @Test
-    void shouldReadHeaders() throws IOException {
-        HttpClient httpClient = makeEchoRequest("/echo?body=Kristiania");
+    void shouldReturnResponseHeaders() throws IOException {
+        HttpClient httpClient = createEchoRequest("/echo?body=Kristiania");
         assertEquals("10", httpClient.getResponseHeader("Content-Length"));
     }
+
+    @Test
+    void shouldReturnResponseBody() throws IOException {
+        HttpClient httpClient = createEchoRequest("/echo?body=Kristiania");
+        assertEquals("Kristiania", httpClient.getResponseBody());
+    }
+
+    private HttpClient createEchoRequest(String requestTarget) throws IOException {
+        return new HttpClient("urlecho.appspot.com", 80, requestTarget);
+    }
+
 }

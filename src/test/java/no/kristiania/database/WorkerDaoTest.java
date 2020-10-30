@@ -19,7 +19,6 @@ class WorkerDaoTest {
     void setUp() {
         JdbcDataSource dataSource = new JdbcDataSource();
         dataSource.setUrl("jdbc:h2:mem:testdatabase;DB_CLOSE_DELAY=-1");
-
         Flyway.configure().dataSource(dataSource).load().migrate();
         workerDao = new WorkerDao(dataSource);
     }

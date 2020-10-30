@@ -28,6 +28,7 @@ class HttpServerTest {
         dataSource.setUrl("jdbc:h2:mem:testdatabase;DB_CLOSE_DELAY=-1");
 
         Flyway.configure().dataSource(dataSource).load().migrate();
+        // Declaring port 0 means: operative system will give us a "random"(unused) port
         server = new HttpServer(0, dataSource);
     }
 
