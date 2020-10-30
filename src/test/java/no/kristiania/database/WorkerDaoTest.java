@@ -10,9 +10,9 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class WorkerDaoTest {
+public class WorkerDaoTest {
     private WorkerDao workerDao;
-    private Random random = new Random();
+    private static Random random = new Random();
 
 
     @BeforeEach
@@ -46,7 +46,7 @@ class WorkerDaoTest {
                 .isEqualTo(worker);
     }
 
-    private Worker exampleWorker() {
+    public static Worker exampleWorker() {
         Worker worker = new Worker();
         worker.setFirstName(exampleFirstName());
         worker.setLastName(exampleLastName());
@@ -55,17 +55,17 @@ class WorkerDaoTest {
     }
 
     /** Returns a random first name */
-    private String exampleFirstName() {
+    private static String exampleFirstName() {
         String[] options = {"Johannes", "Christian", "Lucas", "Matheus", "Markus"};
         return options[random.nextInt(options.length)];
     }
     /** Returns a random last name */
-    private String exampleLastName() {
+    private static String exampleLastName() {
         String[] options = {"Johnsson", "Elfborg", "Colason", "Dobbelthode", "Trebein"};
         return options[random.nextInt(options.length)];
     }
     /** Returns a random email-address */
-    private String exampleEmailAddress() {
+    private static String exampleEmailAddress() {
         String[] options = {"loller@lol.no", "jumper@jump.dk", "supreme@beta.uk", "simp@finlandia.se", "cheaptents@larsmonse.no"};
         return options[random.nextInt(options.length)];
     }

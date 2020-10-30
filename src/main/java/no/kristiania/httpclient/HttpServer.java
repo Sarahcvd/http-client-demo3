@@ -33,7 +33,9 @@ public class HttpServer {
         WorkerTaskDao workerTaskDao = new WorkerTaskDao(dataSource);
         controllers = Map.of(
                 "/api/newTask", new WorkerTaskPostController(workerTaskDao),
-                "/api/tasks", new WorkerTaskGetController(workerTaskDao)
+                "/api/tasks", new WorkerTaskGetController(workerTaskDao),
+                "/api/taskOptions", new WorkerTaskOptionsController(workerTaskDao),
+                "/api/workerOptions", new WorkerOptionsController(workerDao)
         );
         // Open an entry point to our program for network clients
         serverSocket = new ServerSocket(port);
