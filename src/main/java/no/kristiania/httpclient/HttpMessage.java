@@ -70,5 +70,6 @@ public class HttpMessage {
         return headers;
     }
 
-    public String getBody() { return body; }
+    public String getBody() {
+        return body; }
 }

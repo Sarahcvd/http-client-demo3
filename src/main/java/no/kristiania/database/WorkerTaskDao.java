@@ -29,12 +29,12 @@ public class WorkerTaskDao extends AbstractDao<WorkerTask>{
     }
 
     public WorkerTask retrieve(Long id) throws SQLException {
-        return retrieve(id, "select * from worker_tasks WHERE id = ?");
+        return retrieve(id, "SELECT * FROM worker_tasks WHERE id = ?");
     }
 
     public List<WorkerTask> list() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("select * from worker_tasks")) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM worker_tasks")) {
                 try (ResultSet rs = statement.executeQuery()) {
                     List<WorkerTask> workers = new ArrayList<>();
                     while (rs.next()) {
@@ -53,6 +53,4 @@ public class WorkerTaskDao extends AbstractDao<WorkerTask>{
         task.setName(rs.getString("name"));
         return task;
     }
-
-
 }

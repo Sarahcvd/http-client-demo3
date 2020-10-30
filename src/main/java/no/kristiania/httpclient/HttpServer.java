@@ -194,7 +194,6 @@ public class HttpServer {
     }
 
     public static void main(String[] args) throws IOException {
-        PGSimpleDataSource dataSource = new PGSimpleDataSource();
         Properties properties = new Properties();
         try (FileReader fileReader = new FileReader("pgr203.properties")) {
             properties.load(fileReader);
@@ -202,6 +201,7 @@ public class HttpServer {
             System.out.println(e);
         }
 
+        PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setUrl(properties.getProperty("dataSource.url"));
         dataSource.setUser(properties.getProperty("dataSource.username"));
         dataSource.setPassword(properties.getProperty("dataSource.password"));

@@ -80,8 +80,6 @@ class HttpServerTest {
 
     @Test
     void shouldReturn404IfFileNotFound() throws IOException {
-        File contentRoot = new File("target/test-classes");
-
         HttpClient client = new HttpClient("localhost", server.getPort(), "/notFound.txt");
         assertEquals(404, client.getStatusCode());
     }
@@ -111,11 +109,11 @@ class HttpServerTest {
 
     @Test
     void shouldPostNewTask() throws IOException, SQLException {
-        String requestBody = "taskName=Desk cleaning&color=black";
+        String requestBody = "taskName=Deskcleaning&color=black";
         HttpClient postClient = new HttpClient("localhost", server.getPort(), "/api/newTask", "POST", requestBody);
         assertEquals(200, postClient.getStatusCode());
 
         HttpClient getClient = new HttpClient("localhost", server.getPort(), "/api/tasks");
-        assertThat(getClient.getResponseBody()).contains("<li>Desk cleaning</li>");
+        assertThat(getClient.getResponseBody()).contains("<li>Deskcleaning</li>");
     }
 }

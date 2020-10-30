@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpClient {
-    private final int statusCode;
+    private int statusCode;
     private Map<String, String> responseHeaders = new HashMap<>();
     private String responseBody;
 
@@ -14,7 +14,7 @@ public class HttpClient {
         this(hostname, port, requestTarget, "GET", null);
     }
 
-    public HttpClient(final String hostname, int port, String requestTarget, final String httpMethod, String requestBody) throws IOException {
+    public HttpClient(final String hostname, int port, final String requestTarget, final String httpMethod, String requestBody) throws IOException {
         Socket socket = new Socket(hostname, port);
 
         String contentLengthHeader = requestBody != null ? "Content-Length: " + requestBody.length() + "\r\n" : "";
@@ -44,10 +44,8 @@ public class HttpClient {
     }
 
     public static void main(String[] args) throws IOException {
-        String hostname = "urlecho.appspot.com";
-        int port = 80;
-        String requestTarget = "/echo?status=200&body=Hello%20world!";
-        new HttpClient(hostname, port, requestTarget);
+        HttpClient client = new HttpClient("urlecho.appspot.com", 80, "/echo?status=404&Content-Type=text%2Fhtml&body=Hello+world");
+        System.out.println(client.getResponseBody());
     }
 
     public int getStatusCode() {
