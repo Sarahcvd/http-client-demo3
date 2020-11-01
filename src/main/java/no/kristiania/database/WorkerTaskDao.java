@@ -22,13 +22,13 @@ public class WorkerTaskDao extends AbstractDao<WorkerTask>{
 
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                     generatedKeys.next();
-                    task.setId(generatedKeys.getLong("id"));
+                    task.setId(generatedKeys.getInt("id"));
                 }
             }
         }
     }
 
-    public WorkerTask retrieve(Long id) throws SQLException {
+    public WorkerTask retrieve(Integer id) throws SQLException {
         return retrieve(id, "SELECT * FROM worker_tasks WHERE id = ?");
     }
 
@@ -49,7 +49,7 @@ public class WorkerTaskDao extends AbstractDao<WorkerTask>{
     @Override
     protected WorkerTask mapRow(ResultSet rs) throws SQLException {
         WorkerTask task = new WorkerTask();
-        task.setId(rs.getLong("id"));
+        task.setId(rs.getInt("id"));
         task.setName(rs.getString("name"));
         return task;
     }
