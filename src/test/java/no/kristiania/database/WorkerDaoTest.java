@@ -73,10 +73,12 @@ public class WorkerDaoTest {
         new WorkerTaskDao(workerDao.dataSource).insert(task);
 
         String body = "workerId=" + worker.getId() + "&taskId=" + task.getId();
-        controller.handle(new HttpMessage(body), null);
 
+        HttpMessage response = controller.handle(new HttpMessage(body));
         assertThat(workerDao.retrieve(worker.getId()).getTaskId())
                 .isEqualTo(task.getId());
+        assertThat(response.getStartLine())
+                .isEqualTo("HTTP/1.1 200 OK");
     }
 
     public static Worker exampleWorker() {
