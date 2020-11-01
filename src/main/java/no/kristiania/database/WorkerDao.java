@@ -58,4 +58,8 @@ public class WorkerDao extends AbstractDao<Worker> {
         worker.setEmailAddress(rs.getString("email_address"));
         return worker;
     }
+
+    public void update(Worker worker) {
+
+    }
 }
