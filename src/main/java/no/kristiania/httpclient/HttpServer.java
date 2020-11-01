@@ -35,7 +35,8 @@ public class HttpServer {
                 "/api/newTask", new WorkerTaskPostController(workerTaskDao),
                 "/api/tasks", new WorkerTaskGetController(workerTaskDao),
                 "/api/taskOptions", new WorkerTaskOptionsController(workerTaskDao),
-                "/api/workerOptions", new WorkerOptionsController(workerDao)
+                "/api/workerOptions", new WorkerOptionsController(workerDao),
+                "/api/updateWorker", new UpdateWorkerController(workerDao)
         );
         // Open an entry point to our program for network clients
         serverSocket = new ServerSocket(port);

@@ -5,6 +5,7 @@ public class Worker {
     private String lastName;
     private String emailAddress;
     private Long id;
+    private Long taskId;
 
     public String getFirstName() {
         return firstName;
@@ -36,5 +37,13 @@ public class Worker {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 }

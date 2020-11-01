@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TaskDaoTest {
 
     private WorkerTaskDao taskDao;
-    private Random random = new Random();
+    private static Random random = new Random();
 
 
     @BeforeEach
@@ -62,13 +62,13 @@ public class TaskDaoTest {
                 .contains("<option value=" + workerTask.getId() + ">" + workerTask.getName() + "</option>");
     }
 
-    private WorkerTask exampleTask() {
+    public static WorkerTask exampleTask() {
         WorkerTask task = new WorkerTask();
         task.setName(exampleTaskName());
         return task;
     }
 
-    private String exampleTaskName() {
+    private static String exampleTaskName() {
         String[] options = {"Desk cleaning", "Code-review", "Database structure", "Office-backflip", "Wine lottery"};
         return options[random.nextInt(options.length)];
     }
