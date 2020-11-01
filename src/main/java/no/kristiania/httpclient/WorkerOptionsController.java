@@ -23,8 +23,14 @@ public class WorkerOptionsController implements HttpController{
     }
 
     public String getBody() throws SQLException {
-        return workerDao.list()
+        String body = "";
+        for(Worker worker : workerDao.list()){
+            body += "<option value=" + worker.getId() +">" + worker.getFirstName() + "</option>";
+        }
+
+        return body;
+        /*return workerDao.list()
                 .stream().map(w -> "<option value=" + w.getId() +">" + w.getFirstName() + "</option>")
-                .collect(Collectors.joining());
+                .collect(Collectors.joining());*/
     }
 }

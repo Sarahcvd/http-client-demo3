@@ -1,5 +1,7 @@
 package no.kristiania.database;
 
+import no.kristiania.httpclient.WorkerOptionsController;
+import no.kristiania.httpclient.WorkerTaskOptionsController;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +50,16 @@ public class TaskDaoTest {
         assertThat(taskDao.retrieve(task.getId()))
                 .usingRecursiveComparison()
                 .isEqualTo(task);
+    }
+
+    @Test
+    void shouldReturnTasksAsOptions() throws SQLException {
+        WorkerTaskOptionsController controller = new WorkerTaskOptionsController(taskDao);
+        WorkerTask workerTask = exampleTask();
+        taskDao.insert(workerTask);
+
+        assertThat(controller.getBody())
+                .contains("<option value=" + workerTask.getId() + ">" + workerTask.getName() + "</option>");
     }
 
     private WorkerTask exampleTask() {
