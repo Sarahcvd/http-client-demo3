@@ -11,7 +11,11 @@
             <p>Worker: <select name="workerId" id="workerId"></select></p>
             <p>New Task: <select name="taskId" id="taskId"></select></p>
             <button>Submit</button>
-        </form>
+        </form><br/>
+
+        <div>
+            <a href="index.html">Return to menu</a>
+        </div>
     </body>
     <script>
         fetch("/api/workerOptions").then(response => response.text()).then(html => {

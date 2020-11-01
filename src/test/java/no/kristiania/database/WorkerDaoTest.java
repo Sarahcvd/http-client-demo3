@@ -1,10 +1,14 @@
 package no.kristiania.database;
 
+import no.kristiania.httpclient.HttpMessage;
+import no.kristiania.httpclient.UpdateWorkerController;
+import no.kristiania.httpclient.WorkerOptionsController;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Random;
 
@@ -13,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WorkerDaoTest {
     private WorkerDao workerDao;
     private static Random random = new Random();
+    private WorkerTaskDao taskDao;
 
 
     @BeforeEach
@@ -21,6 +26,7 @@ public class WorkerDaoTest {
         dataSource.setUrl("jdbc:h2:mem:testdatabase;DB_CLOSE_DELAY=-1");
         Flyway.configure().dataSource(dataSource).load().migrate();
         workerDao = new WorkerDao(dataSource);
+        taskDao = new WorkerTaskDao(dataSource);
     }
 
     @Test
@@ -40,10 +46,41 @@ public class WorkerDaoTest {
         workerDao.insert(exampleWorker());
         Worker worker = exampleWorker();
         workerDao.insert(worker);
-        assertThat(worker).hasNoNullFieldsOrProperties();
+        assertThat(worker).hasNoNullFieldsOrPropertiesExcept("taskId");
         assertThat(workerDao.retrieve(worker.getId()))
                 .usingRecursiveComparison()
                 .isEqualTo(worker);
+    }
+
+    @Test
+    void shouldReturnWorkersAsOptions() throws SQLException {
+        WorkerOptionsController controller = new WorkerOptionsController(workerDao);
+        Worker worker = WorkerDaoTest.exampleWorker();
+        workerDao.insert(worker);
+
+        assertThat(controller.getBody())
+                .contains("<option value=" + worker.getId() + ">" + worker.getFirstName() + "</option>");
+    }
+
+    @Test
+    void shouldUpdateExistingWorkerWithNewTask() throws IOException, SQLException {
+        UpdateWorkerController controller = new UpdateWorkerController(workerDao);
+
+        Worker worker = exampleWorker();
+        workerDao.insert(worker);
+
+        WorkerTask task = TaskDaoTest.exampleTask();
+        new WorkerTaskDao(workerDao.dataSource).insert(task);
+
+        String body = "workerId=" + worker.getId() + "&taskId=" + task.getId();
+
+        HttpMessage response = controller.handle(new HttpMessage(body));
+        assertThat(workerDao.retrieve(worker.getId()).getTaskId())
+                .isEqualTo(task.getId());
+        assertThat(response.getStartLine())
+                .isEqualTo("HTTP/1.1 302 Redirect");
+        assertThat(response.getHeaders().get("Location"))
+                .isEqualTo("http://localhost:8080/index.html");
     }
 
     public static Worker exampleWorker() {

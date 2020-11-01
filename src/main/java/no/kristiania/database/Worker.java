@@ -4,7 +4,8 @@ public class Worker {
     private String firstName;
     private String lastName;
     private String emailAddress;
-    private Long id;
+    private Integer id;
+    private Integer taskId;
 
     public String getFirstName() {
         return firstName;
@@ -14,11 +15,11 @@ public class Worker {
         this.firstName = firstName;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -36,5 +37,13 @@ public class Worker {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    public Integer getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Integer taskId) {
+        this.taskId = taskId;
     }
 }

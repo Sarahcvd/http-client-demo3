@@ -1,5 +1,7 @@
 package no.kristiania.database;
 
+import no.kristiania.httpclient.WorkerOptionsController;
+import no.kristiania.httpclient.WorkerTaskOptionsController;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TaskDaoTest {
 
     private WorkerTaskDao taskDao;
-    private Random random = new Random();
+    private static Random random = new Random();
 
 
     @BeforeEach
@@ -50,13 +52,23 @@ public class TaskDaoTest {
                 .isEqualTo(task);
     }
 
-    private WorkerTask exampleTask() {
+    @Test
+    void shouldReturnTasksAsOptions() throws SQLException {
+        WorkerTaskOptionsController controller = new WorkerTaskOptionsController(taskDao);
+        WorkerTask workerTask = exampleTask();
+        taskDao.insert(workerTask);
+
+        assertThat(controller.getBody())
+                .contains("<option value=" + workerTask.getId() + ">" + workerTask.getName() + "</option>");
+    }
+
+    public static WorkerTask exampleTask() {
         WorkerTask task = new WorkerTask();
         task.setName(exampleTaskName());
         return task;
     }
 
-    private String exampleTaskName() {
+    private static String exampleTaskName() {
         String[] options = {"Desk cleaning", "Code-review", "Database structure", "Office-backflip", "Wine lottery"};
         return options[random.nextInt(options.length)];
     }
