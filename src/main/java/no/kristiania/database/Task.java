@@ -1,6 +1,6 @@
 package no.kristiania.database;
 
-public class WorkerTask {
+public class Task {
     private String name;
     private Integer id;
 
