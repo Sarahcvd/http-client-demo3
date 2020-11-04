@@ -2,7 +2,7 @@ package no.kristiania.httpclient;
 
 import no.kristiania.database.Worker;
 import no.kristiania.database.WorkerDao;
-import no.kristiania.database.WorkerTaskDao;
+import no.kristiania.database.TaskDao;
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
@@ -25,16 +25,16 @@ public class HttpServer {
 
     private Map<String, HttpController> controllers;
 
-    private WorkerDao workerDao;
+    private static WorkerDao workerDao;
     private ServerSocket serverSocket;
 
     public HttpServer(int port, DataSource dataSource) throws IOException {
         workerDao = new WorkerDao(dataSource);
-        WorkerTaskDao workerTaskDao = new WorkerTaskDao(dataSource);
+        TaskDao taskDao = new TaskDao(dataSource);
         controllers = Map.of(
-                "/api/newTask", new WorkerTaskPostController(workerTaskDao),
-                "/api/tasks", new WorkerTaskGetController(workerTaskDao),
-                "/api/taskOptions", new WorkerTaskOptionsController(workerTaskDao),
+                "/api/newTask", new WorkerTaskPostController(taskDao),
+                "/api/tasks", new WorkerTaskGetController(taskDao),
+                "/api/taskOptions", new taskOptionsController(taskDao),
                 "/api/workerOptions", new WorkerOptionsController(workerDao),
                 "/api/updateWorker", new UpdateWorkerController(workerDao)
         );
@@ -97,11 +97,11 @@ public class HttpServer {
         }
     }
 
-    private HttpController getController(String requestPath) {
+    public HttpController getController(String requestPath) {
         return controllers.get(requestPath);
     }
 
-    private void handlePostWorker(Socket clientSocket, HttpMessage request) throws SQLException, IOException {
+    public static void handlePostWorker(Socket clientSocket, HttpMessage request) throws SQLException, IOException {
         QueryString requestedParameter = new QueryString(request.getBody());
         String decodedOutput = URLDecoder.decode(requestedParameter.getParameter("email_address"), StandardCharsets.UTF_8);
 
@@ -121,8 +121,8 @@ public class HttpServer {
         clientSocket.getOutputStream().write(response.getBytes());
     }
 
-    private void handleFileRequest(Socket clientSocket, String requestPath) throws IOException {
-        try (InputStream inputStream = getClass().getResourceAsStream(requestPath)) {
+    public static void handleFileRequest(Socket clientSocket, String requestPath) throws IOException {
+        try (InputStream inputStream = HttpServer.class.getResourceAsStream(requestPath)) {
             if(inputStream == null){
                 String body = requestPath + " does not exist";
                 String response = "HTTP/1.1 404 Not Found\r\n" +
@@ -154,7 +154,7 @@ public class HttpServer {
         }
     }
 
-    private void handleGetWorkers(Socket clientSocket) throws IOException, SQLException {
+    public static void handleGetWorkers(Socket clientSocket) throws IOException, SQLException {
         String body = "<ul>";
         for (Worker worker : workerDao.list()) {
             body += "<li>" + worker.getFirstName() + " " + worker.getLastName() + " " + worker.getEmailAddress() + "</li>";
@@ -172,7 +172,7 @@ public class HttpServer {
         clientSocket.getOutputStream().write(response.getBytes());
     }
 
-    private void handleEchoRequest(Socket clientSocket, String requestTarget, int questionPos) throws IOException {
+    public static void handleEchoRequest(Socket clientSocket, String requestTarget, int questionPos) throws IOException {
         String statusCode = "200";
         String body = "Hello <strong>World</strong>!";
         if (questionPos != -1) {

@@ -1,23 +1,23 @@
 package no.kristiania.httpclient;
 
-import no.kristiania.database.WorkerTask;
-import no.kristiania.database.WorkerTaskDao;
+import no.kristiania.database.Task;
+import no.kristiania.database.TaskDao;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.SQLException;
 
 public class WorkerTaskGetController implements HttpController {
-    private WorkerTaskDao workerTaskDao;
+    private TaskDao taskDao;
 
-    public WorkerTaskGetController(WorkerTaskDao workerTaskDao) {
-        this.workerTaskDao = workerTaskDao;
+    public WorkerTaskGetController(TaskDao taskDao) {
+        this.taskDao = taskDao;
     }
 
     @Override
     public void handle(HttpMessage request, Socket clientSocket) throws IOException, SQLException {
         String body = "<ul>";
-        for(WorkerTask task : workerTaskDao.list()) {
+        for(Task task : taskDao.list()) {
             body += "<li>" + task.getName() + "</li>";
         }
 

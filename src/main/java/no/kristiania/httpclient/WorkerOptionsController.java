@@ -2,12 +2,10 @@ package no.kristiania.httpclient;
 
 import no.kristiania.database.Worker;
 import no.kristiania.database.WorkerDao;
-import no.kristiania.database.WorkerTaskDao;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.stream.Collectors;
 
 public class WorkerOptionsController implements HttpController{
     private WorkerDao workerDao;

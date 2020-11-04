@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WorkerDaoTest {
     private WorkerDao workerDao;
     private static Random random = new Random();
-    private WorkerTaskDao taskDao;
+    private TaskDao taskDao;
 
 
     @BeforeEach
@@ -26,7 +26,7 @@ public class WorkerDaoTest {
         dataSource.setUrl("jdbc:h2:mem:testdatabase;DB_CLOSE_DELAY=-1");
         Flyway.configure().dataSource(dataSource).load().migrate();
         workerDao = new WorkerDao(dataSource);
-        taskDao = new WorkerTaskDao(dataSource);
+        taskDao = new TaskDao(dataSource);
     }
 
     @Test
@@ -69,8 +69,8 @@ public class WorkerDaoTest {
         Worker worker = exampleWorker();
         workerDao.insert(worker);
 
-        WorkerTask task = TaskDaoTest.exampleTask();
-        new WorkerTaskDao(workerDao.dataSource).insert(task);
+        Task task = TaskDaoTest.exampleTask();
+        new TaskDao(workerDao.dataSource).insert(task);
 
         String body = "workerId=" + worker.getId() + "&taskId=" + task.getId();
 
