@@ -8,17 +8,19 @@
     <body>
 
         <h1>Task overview</h1>
-        <div id="tasks"></div>
-
-        <br/>
+        <a href="index.html">Return to menu</a>
         <div>
-            <a href="index.html">Return to menu</a>
+            <button onClick="showAllTasks()">Show all tasks</button>
         </div>
+        <div id="tasks"></div>
 
     </body>
     <script>
-        fetch("/api/tasks").then(response => response.text()).then(html => {
-            document.getElementById("tasks").innerHTML = html
-        });
+        function showAllTasks(){
+            fetch("/api/tasks").then(response => response.text()).then(html => {
+                document.getElementById("tasks").innerHTML = html
+            });
+        }
+
     </script>
 </html>

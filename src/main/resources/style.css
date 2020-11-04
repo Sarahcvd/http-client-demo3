@@ -1,3 +1,13 @@
 body {
-    background-color: lime;
+    background-color: #63C5DA;
+}
+
+.color-codes {
+    margin: 0;
+    padding: 0;
+}
+
+#color-codes-container {
+    margin: 0;
+    padding: 0;
 }

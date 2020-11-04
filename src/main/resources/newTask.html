@@ -9,15 +9,25 @@
 
 <div>
     <form method="POST" action="/api/newTask">
+        <h1>Create a new worker task</h1>
+        <div id="color-codes-container">
+            <h3 class="color-codes">Green = finished</h3>
+            <h3 class="color-codes">Yellow = doing</h3>
+            <h3 class="color-codes">Red = to do</h3>
+        </div>
         <p>Task: <input type="text" name="taskName" /></p>
-        <p>Display color: <input name="color" type="color"></p>
+        <p>Status color code: <select name="colorCode">
+            <option value="Green">Green</option>
+            <option value="Yellow">Yellow</option>
+            <option value="Red">Red</option>
+        </select></p>
         <button>Add</button>
     </form><br/>
+</div>
 
     <div>
         <a href="index.html">Return to menu</a>
     </div>
-</div>
 
 </body>
 

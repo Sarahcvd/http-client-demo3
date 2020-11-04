@@ -27,10 +27,11 @@ public class HttpServer {
 
     private static WorkerDao workerDao;
     private ServerSocket serverSocket;
+    private final TaskDao taskDao;
 
     public HttpServer(int port, DataSource dataSource) throws IOException {
         workerDao = new WorkerDao(dataSource);
-        TaskDao taskDao = new TaskDao(dataSource);
+        taskDao = new TaskDao(dataSource);
         controllers = Map.of(
                 "/api/newTask", new WorkerTaskPostController(taskDao),
                 "/api/tasks", new WorkerTaskGetController(taskDao),

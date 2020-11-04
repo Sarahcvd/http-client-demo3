@@ -18,7 +18,7 @@ public class WorkerTaskGetController implements HttpController {
     public void handle(HttpMessage request, Socket clientSocket) throws IOException, SQLException {
         String body = "<ul>";
         for(Task task : taskDao.list()) {
-            body += "<li>" + task.getName() + "</li>";
+            body += "<li colorCode="+ task.getColorCode() +">" + task.getName() + "</br>   Current status:   " + task.getColorCode() + "</li>";
         }
 
         body += "</ul>";

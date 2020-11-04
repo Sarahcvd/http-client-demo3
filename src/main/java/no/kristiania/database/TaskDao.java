@@ -14,10 +14,11 @@ public class TaskDao extends AbstractDao<Task>{
     public void insert(Task task) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO task (name) VALUES (?)",
+                    "INSERT INTO task (name, colorcode) VALUES (?, ?)",
                     Statement.RETURN_GENERATED_KEYS
             )) {
                 statement.setString(1, task.getName());
+                statement.setString(2, task.getColorCode());
                 statement.executeUpdate();
 
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
@@ -51,6 +52,7 @@ public class TaskDao extends AbstractDao<Task>{
         Task task = new Task();
         task.setId(rs.getInt("id"));
         task.setName(rs.getString("name"));
+        task.setColorCode(rs.getString("colorcode"));
         return task;
     }
 }

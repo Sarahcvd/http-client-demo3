@@ -1,4 +1,5 @@
 create table task (
     id serial primary key,
-    name varchar
+    name varchar,
+    colorCode varchar
 )

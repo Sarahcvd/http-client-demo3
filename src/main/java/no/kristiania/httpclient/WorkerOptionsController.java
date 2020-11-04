@@ -27,8 +27,5 @@ public class WorkerOptionsController implements HttpController{
         }
 
         return body;
-        /*return workerDao.list()
-                .stream().map(w -> "<option value=" + w.getId() +">" + w.getFirstName() + "</option>")
-                .collect(Collectors.joining());*/
     }
 }
