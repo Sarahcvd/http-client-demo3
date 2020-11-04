@@ -11,6 +11,9 @@ Etter å ha kjørt mvn package kan du kjøre serveren gjennom å skrive: java -j
 
 Når brukeren har opprettet forbindelse mot serveren så har denne mulighet til å lagre informasjon til arbeidere som outputtes i en HTML fil og lagres i en database.
 
-Prosjektet er bygget av Sarah Christine Van Dijk og Wali Gustav Björk
+
+Link til github issues for en annen gruppe: https://github.com/kristiania/pgr203eksamen-thensrud/issues
+
+Prosjektet er bygget av Sarah Christine van Dijk og Wali Gustav Björk
 
 ![Server Structure](docs/server_structure.png)
