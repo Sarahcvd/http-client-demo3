@@ -48,7 +48,7 @@ public class TaskDaoTest {
     void shouldPostNewTask() throws IOException {
         String requestBody = "taskName=Deskcleaning&colorCode=black";
         HttpClient postClient = new HttpClient("localhost", server.getPort(), "/api/newTask", "POST", requestBody);
-        assertEquals(200, postClient.getStatusCode());
+        assertEquals(302, postClient.getStatusCode());
 
         HttpClient getClient = new HttpClient("localhost", server.getPort(), "/api/tasks");
         assertThat(getClient.getResponseBody()).contains("<ul><li colorCode=black>Deskcleaning</br>   Current status:   black</li></ul>");

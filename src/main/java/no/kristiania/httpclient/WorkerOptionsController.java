@@ -15,9 +15,10 @@ public class WorkerOptionsController implements HttpController{
     }
 
     @Override
-    public void handle(HttpMessage request, Socket clientSocket) throws IOException, SQLException {
+    public HttpMessage handle(HttpMessage request, Socket clientSocket) throws IOException, SQLException {
         HttpMessage response = new HttpMessage(getBody());
         response.write(clientSocket);
+        return response;
     }
 
     public String getBody() throws SQLException {

@@ -90,7 +90,7 @@ class HttpServerTest {
     void shouldPostNewWorker() throws IOException, SQLException {
         String requestBody = "first_name=wali&email_address=wgbjork@gmail.com";
         HttpClient client = new HttpClient("localhost", server.getPort(), "/api/newWorker", "POST", requestBody);
-        assertEquals(200, client.getStatusCode());
+        assertEquals(302, client.getStatusCode());
         assertThat(server.getWorkers())
                 .filteredOn(worker -> worker.getFirstName().equals("wali"))
                 .isNotEmpty()

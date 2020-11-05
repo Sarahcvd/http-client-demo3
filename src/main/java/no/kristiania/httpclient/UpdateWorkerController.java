@@ -15,9 +15,10 @@ public class UpdateWorkerController implements HttpController{
     }
 
     @Override
-    public void handle(HttpMessage request, Socket clientSocket) throws IOException, SQLException {
+    public HttpMessage handle(HttpMessage request, Socket clientSocket) throws IOException, SQLException {
         HttpMessage response = handle(request);
         response.write(clientSocket);
+        return response;
     }
 
     public HttpMessage handle(HttpMessage request) throws SQLException {
@@ -32,7 +33,7 @@ public class UpdateWorkerController implements HttpController{
 
         HttpMessage redirect = new HttpMessage();
         redirect.setStartLine("HTTP/1.1 302 Redirect");
-        redirect.getHeaders().put("Location", "http://localhost:8080/index.html");
+        redirect.getHeaders().put("Location", "http://localhost:8080/editWorker.html");
         return redirect;
     }
 }

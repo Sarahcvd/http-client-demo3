@@ -17,7 +17,7 @@ public class WorkerTaskPostController implements HttpController {
     }
 
     @Override
-    public void handle(HttpMessage request, Socket clientSocket) throws IOException, SQLException {
+    public HttpMessage handle(HttpMessage request, Socket clientSocket) throws IOException, SQLException {
         QueryString requestedParameter = new QueryString(request.getBody());
 
 
@@ -29,14 +29,16 @@ public class WorkerTaskPostController implements HttpController {
         task.setColorCode(decodedTaskColor);
         taskDao.insert(task);
 
-        String body = "Okay";
-        String response = "HTTP/1.1 200 OK\r\n" +
+        String body = "Hang on, redirecting....";
+        String response = "HTTP/1.1 302 REDIRECT\r\n" +
+                "Location: http://localhost:8080/newTask.html\r\n" +
                 "Content-Length: " + body.length() + "\r\n" +
                 "Connection: close\r\n" +
                 "\r\n" +
                 body;
         // Write the response back to the client
         clientSocket.getOutputStream().write(response.getBytes());
+        return request;
     }
 
 }

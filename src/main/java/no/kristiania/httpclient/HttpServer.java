@@ -112,8 +112,9 @@ public class HttpServer {
         worker.setEmailAddress(decodedOutput);
 
         workerDao.insert(worker);
-        String body = "Okay";
-        String response = "HTTP/1.1 200 OK\r\n" +
+        String body = "Hang on, redirecting....";
+        String response = "HTTP/1.1 302 REDIRECT\r\n" +
+                "Location: http://localhost:8080/newWorker.html\r\n" +
                 "Content-Length: " + body.length() + "\r\n" +
                 "Connection: close\r\n" +
                 "\r\n" +
